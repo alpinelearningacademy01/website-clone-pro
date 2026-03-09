@@ -37,9 +37,9 @@ const ServiceCard = ({ service, index }: { service: typeof services[0]; index: n
       <img
         src={service.image}
         alt={service.title}
-        className={`absolute top-0 ${service.imagePosition === "left" ? "left-0" : "right-0"} h-full w-1/3 object-cover opacity-70 group-hover:opacity-100 group-hover:w-[38%] transition-all duration-500`}
+        className={`absolute top-0 ${service.imagePosition === "left" ? "left-0" : "right-0"} h-full w-[35%] md:w-[30%] object-cover opacity-70 group-hover:opacity-100 group-hover:w-[42%] md:group-hover:w-[38%] transition-all duration-500`}
       />
-      <div className={`relative z-10 flex flex-col justify-center h-full px-8 ${service.imagePosition === "left" ? "ml-[33%] md:ml-[30%]" : "mr-[33%] md:mr-[30%]"}`}>
+      <div className={`relative z-10 flex flex-col justify-center h-full px-8 transition-all duration-500 ${service.imagePosition === "left" ? "ml-[35%] md:ml-[30%] group-hover:ml-[42%] md:group-hover:ml-[38%]" : "mr-[35%] md:mr-[30%] group-hover:mr-[42%] md:group-hover:mr-[38%]"}`}>
         <h3 className="text-lg md:text-xl font-bold text-primary-foreground group-hover:text-elvie-blue-light transition-colors duration-300">
           {service.title}
         </h3>

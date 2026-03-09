@@ -1,17 +1,23 @@
 import { motion } from "framer-motion";
 import heroBg from "@/assets/hero-bg.jpg";
+import heroVideo from "@/assets/COSMO VISION 2026.mp4";
 
 const ElvieHero = () => {
   return (
     <section id="home" className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-      <motion.img
-        src={heroBg}
-        alt="Dubai skyline"
+      <motion.video
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster={heroBg}
         className="absolute inset-0 w-full h-full object-cover"
         initial={{ scale: 1.15 }}
         animate={{ scale: 1 }}
         transition={{ duration: 8, ease: "easeOut" }}
-      />
+      >
+        <source src={heroVideo} type="video/mp4" />
+      </motion.video>
       <div className="absolute inset-0 elvie-overlay" />
 
       {/* Floating particles */}
@@ -80,14 +86,14 @@ const ElvieHero = () => {
       </div>
 
       {/* Scroll indicator */}
-      <motion.div
+      {/* <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
         <span className="text-primary-foreground/50 text-xs tracking-widest uppercase">Scroll</span>
         <div className="w-px h-8 bg-gradient-to-b from-primary-foreground/50 to-transparent" />
-      </motion.div>
+      </motion.div> */}
     </section>
   );
 };
