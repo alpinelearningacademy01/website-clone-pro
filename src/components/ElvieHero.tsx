@@ -77,12 +77,12 @@ const ElvieHero = () => {
           >
             EXPLORE
           </a>
-          <a
-            href="#booking"
+          <Link
+            to="/booking"
             className="px-8 py-3 bg-primary-foreground text-elvie-navy rounded font-semibold text-sm tracking-wider hover:bg-primary-foreground/90 transition-all duration-300"
           >
             BOOK NOW
-          </a>
+          </Link>
         </motion.div>
       </div>
 
