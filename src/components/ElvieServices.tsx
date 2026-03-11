@@ -1,12 +1,12 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import serviceEventMgmt from "@/assets/service-event-mgmt.jpg";
-import serviceCorporate from "@/assets/service-corporate.jpg";
-import serviceProduction from "@/assets/service-production.jpg";
-import serviceLed from "@/assets/service-led.jpg";
-import servicePhoto from "@/assets/service-photo.jpg";
-import serviceMerch from "@/assets/service-merch.jpg";
-import serviceDigital from "@/assets/service-digital.jpg";
+import serviceEventMgmt from "@/assets/service-event-mgmt.png";
+import serviceCorporate from "@/assets/service-corporate.png";
+import serviceProduction from "@/assets/service-production.png";
+import serviceLed from "@/assets/service-led.png";
+import servicePhoto from "@/assets/service-photo.png";
+import serviceMerch from "@/assets/service-merch.png";
+import serviceDigital from "@/assets/service-digital.png";
 import servicePermit from "@/assets/service-permit.jpg";
 
 const services = [

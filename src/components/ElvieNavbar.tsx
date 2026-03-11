@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import logoImg from "../assets/Logo.png";
 
 const navLinks = [
   { label: "HOME", href: "/" },
@@ -27,21 +28,20 @@ const ElvieNavbar = () => {
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "elvie-gradient-dark shadow-2xl backdrop-blur-md" : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "elvie-gradient-dark shadow-2xl backdrop-blur-md" : "bg-transparent"
+        }`}
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <div className="container mx-auto flex items-center justify-between py-4 px-4 lg:px-8">
-        <Link to="/" className="flex flex-col items-center">
-          <span className="text-2xl font-bold tracking-[0.3em] text-primary-foreground font-montserrat">
-            EL<span className="text-elvie-blue-light">V</span>IE
-          </span>
-          <span className="text-[10px] tracking-[0.5em] text-primary-foreground/70 uppercase">
-            Events
-          </span>
+        <Link to="/" className="flex items-center">
+          <img
+            src={logoImg}
+            alt="Elvie Events Logo"
+            className="h-16 md:h-18 lg:h-20 w-auto object-contain"
+            draggable={false}
+          />
         </Link>
 
         <div className="hidden md:flex items-center gap-1">
@@ -49,17 +49,15 @@ const ElvieNavbar = () => {
             <Link
               key={link.label}
               to={link.href}
-              className={`px-4 py-2 text-sm font-medium tracking-wider relative group transition-colors ${
-                location.pathname === link.href
-                  ? "text-primary-foreground"
-                  : "text-primary-foreground/90 hover:text-primary-foreground"
-              }`}
+              className={`px-4 py-2 text-sm font-medium tracking-wider relative group transition-colors ${location.pathname === link.href
+                ? "text-primary-foreground"
+                : "text-primary-foreground/90 hover:text-primary-foreground"
+                }`}
             >
               {link.label}
               <span
-                className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-elvie-blue-light rounded-full transition-all duration-300 ${
-                  location.pathname === link.href ? "w-3/4" : "w-0 group-hover:w-3/4"
-                }`}
+                className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-elvie-blue-light rounded-full transition-all duration-300 ${location.pathname === link.href ? "w-3/4" : "w-0 group-hover:w-3/4"
+                  }`}
               />
               {i < navLinks.length - 1 && (
                 <span className="ml-4 text-primary-foreground/30">|</span>

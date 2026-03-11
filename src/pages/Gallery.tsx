@@ -6,13 +6,13 @@ import ElvieFooter from "@/components/ElvieFooter";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageHeader from "@/components/PageHeader";
 import galleryHero from "@/assets/gallery-hero.webp";
-import serviceEventMgmt from "@/assets/service-event-mgmt.jpg";
-import serviceCorporate from "@/assets/service-corporate.jpg";
-import serviceProduction from "@/assets/service-production.jpg";
-import serviceLed from "@/assets/service-led.jpg";
-import servicePhoto from "@/assets/service-photo.jpg";
-import serviceMerch from "@/assets/service-merch.jpg";
-import serviceDigital from "@/assets/service-digital.jpg";
+import serviceEventMgmt from "@/assets/service-event-mgmt.png";
+import serviceCorporate from "@/assets/service-corporate.png";
+import serviceProduction from "@/assets/service-production.png";
+import serviceLed from "@/assets/service-led.png";
+import servicePhoto from "@/assets/service-photo.png";
+import serviceMerch from "@/assets/service-merch.png";
+import serviceDigital from "@/assets/service-digital.png";
 import servicePermit from "@/assets/service-permit.jpg";
 import aboutImg from "@/assets/about-event.jpg";
 
@@ -43,14 +43,22 @@ const Gallery = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {galleryImages.map((img, i) => (
+              // <motion.div
+              //   key={i}
+              //   className="relative group cursor-pointer overflow-hidden rounded-xl aspect-[4/3]"
+              //   initial={{ opacity: 0, y: 40 }}
+              //   animate={gridInView ? { opacity: 1, y: 0 } : {}}
+              //   transition={{ duration: 0.5, delay: i * 0.08 }}
+              //   whileHover={{ scale: 1.02 }}
+              //   onClick={() => setLightbox(i)}
+              // >
               <motion.div
                 key={i}
-                className="relative group cursor-pointer overflow-hidden rounded-xl aspect-[4/3]"
+                className="relative group overflow-hidden rounded-xl aspect-[4/3]"
                 initial={{ opacity: 0, y: 40 }}
                 animate={gridInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 whileHover={{ scale: 1.02 }}
-                onClick={() => setLightbox(i)}
               >
                 <img
                   src={img.src}
