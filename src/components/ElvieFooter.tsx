@@ -1,7 +1,49 @@
 import { motion } from "framer-motion";
 import { Facebook, Instagram, MessageCircle } from "lucide-react";
+import { useState } from "react";
+import emailjs from "@emailjs/browser";
+import { toast } from "sonner";
+import { Link } from "react-router-dom";
+import logoImg from "../assets/Logo.png";
 
 const ElvieFooter = () => {
+  const [email, setEmail] = useState("");
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
+
+    if (serviceId === "YOUR_SERVICE_ID" || !publicKey) {
+      toast.info("Subscribing to newsletter...");
+      setTimeout(() => {
+        toast.success("Thank you for subscribing to our newsletter!");
+        setEmail("");
+      }, 1000);
+      return;
+    }
+
+    const templateParams = {
+      from_email: email,
+      message: "New Newsletter Subscription",
+      to_email: "navazsherasiya0@gmail.com",
+    };
+
+    toast.promise(
+      emailjs.send(serviceId, templateId, templateParams, publicKey),
+      {
+        loading: 'Subscribing...',
+        success: () => {
+          setEmail("");
+          return 'Thank you for subscribing!';
+        },
+        error: 'Failed to subscribe. Please try again later.',
+      }
+    );
+  };
   return (
     <footer className="relative text-white">
       {/* Background */}
@@ -19,15 +61,20 @@ const ElvieFooter = () => {
         <div className="grid md:grid-cols-4 gap-10 mb-14">
 
           {/* Company */}
-          <div>
-            <h3 className="text-xl font-bold mb-4 tracking-wider">
-              EL<span className="text-blue-400">V</span>IE
-            </h3>
+          <div className="flex flex-col gap-4">
+            <Link to="/" className="flex items-center">
+              <img
+                src={logoImg}
+                alt="Elvie Events Logo"
+                className="h-16 md:h-18 lg:h-20 w-auto object-contain"
+                draggable={false}
+              />
+            </Link>
 
             <p className="text-sm text-white/70 leading-relaxed">
-              Elvie Events L.L.C-FZ
-              Meydan Grandstand 6th Floor
-              Meydan Road Nad Al Sheba
+              Elvie Events L.L.C-FZ<br />
+              Meydan Grandstand 6th Floor<br />
+              Meydan Road Nad Al Sheba<br />
               Dubai, UAE
             </p>
 
@@ -64,16 +111,19 @@ const ElvieFooter = () => {
               Sign Up for Offers & News
             </h4>
 
-            <div className="flex items-center bg-white/10 rounded-lg overflow-hidden">
+            <form onSubmit={handleNewsletterSubmit} className="flex items-center bg-white/10 rounded-lg overflow-hidden">
               <input
                 type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 className="bg-transparent px-4 py-3 text-sm outline-none flex-1"
               />
-              <button className="bg-blue-500 px-4 py-3 hover:bg-blue-600 transition">
+              <button type="submit" className="bg-blue-500 px-4 py-3 hover:bg-blue-600 transition">
                 →
               </button>
-            </div>
+            </form>
 
             {/* Social Icons */}
             <div className="flex gap-3 mt-6">
@@ -110,6 +160,7 @@ const ElvieFooter = () => {
 
           <div className="mt-3 md:mt-0 text-right">
             <p>VAT Registration Number: 100509225700003</p>
+            <p>Trade License Number: 2100876</p>
             <p>CorporateTax Reg. Number: COR-98456123</p>
           </div>
         </div>

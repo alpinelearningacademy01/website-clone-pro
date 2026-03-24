@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import newsletterBg from "@/assets/newsletter-bg.jpg";
+import emailjs from "@emailjs/browser";
+import { toast } from "sonner";
 
 const ElvieContact = () => {
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
@@ -9,8 +11,40 @@ const ElvieContact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Thank you for your message! We will get back to you soon.");
-    setForm({ name: "", email: "", phone: "", message: "" });
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
+
+    if (serviceId === "YOUR_SERVICE_ID" || !publicKey) {
+      // Fallback for demonstration if keys are not set
+      toast.info("Connecting to email service...");
+      setTimeout(() => {
+        toast.success("Thank you for your message! We will get back to you soon.");
+        setForm({ name: "", email: "", phone: "", message: "" });
+      }, 1000);
+      return;
+    }
+
+    const templateParams = {
+      from_name: form.name,
+      from_email: form.email,
+      phone: form.phone,
+      message: form.message,
+      to_email: "navazsherasiya0@gmail.com",
+    };
+
+    toast.promise(
+      emailjs.send(serviceId, templateId, templateParams, publicKey),
+      {
+        loading: 'Sending your message...',
+        success: () => {
+          setForm({ name: "", email: "", phone: "", message: "" });
+          return 'Thank you! Your message has been sent successfully.';
+        },
+        error: 'Failed to send message. Please try again later.',
+      }
+    );
   };
 
   return (
