@@ -105,7 +105,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import heroBg from "@/assets/hero-bg.jpg";
-import heroVideo from "@/assets/COSMO VISION 2026.mp4";
 import logoImg from "@/assets/Logo.webp";
 
 const ElvieHero = () => {
@@ -124,7 +123,7 @@ const ElvieHero = () => {
         animate={{ scale: 1 }}
         transition={{ duration: 8, ease: "easeOut" }}
       >
-        <source src={heroVideo} type="video/mp4" />
+        <source src="/hero-video.mp4" type="video/mp4" />
       </motion.video>
 
       {/* <div className="absolute inset-0 elvie-overlay" /> */}
