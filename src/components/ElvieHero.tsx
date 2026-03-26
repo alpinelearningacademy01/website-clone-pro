@@ -112,24 +112,19 @@ const ElvieHero = () => {
     <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
 
       {/* Background Video */}
-      <motion.div
-        className="absolute inset-0 w-full h-full"
+      <motion.video
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster={heroBg}
+        className="absolute inset-0 w-full h-full object-cover"
         initial={{ scale: 1.15 }}
         animate={{ scale: 1 }}
         transition={{ duration: 8, ease: "easeOut" }}
       >
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster={heroBg}
-          className="w-full h-full object-cover"
-          preload="auto"
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
-      </motion.div>
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </motion.video>
 
       {/* <div className="absolute inset-0 elvie-overlay" /> */}
 
@@ -150,7 +145,7 @@ const ElvieHero = () => {
       ))}
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4">
+      <div className="relative z-10 text-center px-4 -mt-12 md:-mt-20">
 
         {/* Logo */}
         <motion.div
@@ -172,7 +167,7 @@ const ElvieHero = () => {
 
         {/* Buttons */}
         <motion.div
-          className="mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+          className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
