@@ -8,169 +8,242 @@ import { toast } from "sonner";
 
 const Booking = () => {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    firstName: "",
+    lastName: "",
+    company: "",
+    designation: "",
     phone: "",
-    eventDate: "",
-    eventType: "",
+    email: "",
+    contactMethod: [],
     message: "",
   });
+
+  const handleCheckbox = (value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      contactMethod: prev.contactMethod.includes(value)
+        ? prev.contactMethod.filter((v) => v !== value)
+        : [...prev.contactMethod, value],
+    }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
-
-    if (serviceId === "YOUR_SERVICE_ID" || !publicKey) {
-      toast.info("Connecting to email service...");
-      setTimeout(() => {
-        toast.success("Thank you for your inquiry! We will get back to you soon.");
-        setForm({ name: "", email: "", phone: "", eventDate: "", eventType: "", message: "" });
-      }, 1000);
+    if (form.contactMethod.length === 0) {
+      toast.error("Please select at least one preferred method of contact.");
       return;
     }
 
-    const templateParams = {
-      from_name: form.name,
-      from_email: form.email,
-      phone: form.phone,
-      event_date: form.eventDate,
-      event_type: form.eventType,
-      message: form.message,
-      to_email: "navazsherasiya0@gmail.com",
+    const { firstName, lastName, company, designation, phone, email, message, contactMethod } = form;
+    const fullName = `${firstName} ${lastName}`;
+
+    // Helper to reset form
+    const resetForm = () => {
+      setForm({
+        firstName: "",
+        lastName: "",
+        company: "",
+        designation: "",
+        phone: "",
+        email: "",
+        contactMethod: [],
+        message: "",
+      });
     };
 
-    toast.promise(
-      emailjs.send(serviceId, templateId, templateParams, publicKey),
-      {
-        loading: 'Sending your inquiry...',
-        success: () => {
-          setForm({ name: "", email: "", phone: "", eventDate: "", eventType: "", message: "" });
-          return 'Thank you! Your inquiry has been sent successfully.';
-        },
-        error: 'Failed to send inquiry. Please try again later.',
-      }
-    );
+    // Handle Email Submission
+    if (contactMethod.includes("Email")) {
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      const templateParams = {
+        first_name: firstName,
+        last_name: lastName,
+        company: company,
+        designation: designation,
+        phone: phone,
+        email: email,
+        contact_method: contactMethod.join(", "),
+        message: message,
+        to_email: "navazsherasiya0@gmail.com",
+      };
+
+      toast.promise(
+        emailjs.send(serviceId, templateId, templateParams, publicKey),
+        {
+          loading: "Sending enquiry to email...",
+          success: () => {
+            if (!contactMethod.includes("Phone")) resetForm();
+            return "Enquiry sent to Email successfully!";
+          },
+          error: "Failed to send enquiry via Email",
+        }
+      );
+    }
+
+    // Handle Phone Submission (WhatsApp)
+    if (contactMethod.includes("Phone")) {
+      const whatsappNumber = "7984567218";
+      const whatsappText = 
+        `*New Enquiry*\n\n` +
+        `*Name:* ${fullName}\n` +
+        `*Company:* ${company || "N/A"}\n` +
+        `*Designation:* ${designation || "N/A"}\n` +
+        `*Phone:* ${phone}\n` +
+        `*Email:* ${email}\n` +
+        `*Message:* ${message}`;
+      
+      const encodedMessage = encodeURIComponent(whatsappText);
+      const whatsappUrl = `https://wa.me/91${whatsappNumber}?text=${encodedMessage}`;
+      
+      window.open(whatsappUrl, "_blank");
+      toast.success("Opening WhatsApp for Phone enquiry...");
+      
+      if (!contactMethod.includes("Email")) resetForm();
+    }
   };
 
   const inputClasses =
-    "w-full border border-border rounded-lg px-4 py-3 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-elvie-blue transition-shadow";
+    "w-full border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   return (
     <div className="min-h-screen bg-background">
       <ElvieNavbar />
 
-      {/* Gradient Header Area - matches reference */}
       <div className="elvie-gradient-diagonal h-28" />
 
       <section className="py-16">
-        <div className="container mx-auto px-4 max-w-2xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-10 tracking-wide">
-              Booking Inquiry
-            </h1>
+        <div className="container mx-auto px-4 max-w-5xl">
+          <h1 className="text-3xl font-bold mb-10 text-center">
+            Send us your enquiry
+          </h1>
 
-            <motion.form
-              onSubmit={handleSubmit}
-              className="space-y-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-            >
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Name <span className="text-destructive">*</span>
-                </label>
+          <form onSubmit={handleSubmit} className="space-y-6">
+
+            {/* Grid Layout */}
+            <div className="grid md:grid-cols-2 gap-6">
+
+              {/* LEFT SIDE */}
+              <div className="space-y-4">
                 <input
                   type="text"
-                  required
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="First Name"
+                  value={form.firstName}
+                  onChange={(e) =>
+                    setForm({ ...form, firstName: e.target.value })
+                  }
                   className={inputClasses}
+                  required
                 />
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Email <span className="text-destructive">*</span>
-                </label>
                 <input
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  type="text"
+                  placeholder="Last Name"
+                  value={form.lastName}
+                  onChange={(e) =>
+                    setForm({ ...form, lastName: e.target.value })
+                  }
                   className={inputClasses}
                 />
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
+                <input
+                  type="text"
+                  placeholder="Company"
+                  value={form.company}
+                  onChange={(e) =>
+                    setForm({ ...form, company: e.target.value })
+                  }
+                  className={inputClasses}
+                />
+
+                <input
+                  type="text"
+                  placeholder="Designation"
+                  value={form.designation}
+                  onChange={(e) =>
+                    setForm({ ...form, designation: e.target.value })
+                  }
+                  className={inputClasses}
+                />
+
                 <input
                   type="tel"
+                  placeholder="Phone"
                   value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  placeholder="(201) 555-0123"
+                  onChange={(e) =>
+                    setForm({ ...form, phone: e.target.value })
+                  }
                   className={inputClasses}
                 />
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Event Date</label>
                 <input
-                  type="date"
-                  value={form.eventDate}
-                  onChange={(e) => setForm({ ...form, eventDate: e.target.value })}
+                  type="email"
+                  placeholder="Email"
+                  value={form.email}
+                  onChange={(e) =>
+                    setForm({ ...form, email: e.target.value })
+                  }
                   className={inputClasses}
+                  required
                 />
+
+                {/* Preferred Contact */}
+                <div>
+                  <p className="text-sm mb-2">
+                    Preferred method of contact
+                  </p>
+                  <div className="flex gap-6">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        onChange={() => handleCheckbox("Phone")}
+                        checked={form.contactMethod.includes("Phone")}
+                      />
+                      Phone
+                    </label>
+
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        onChange={() => handleCheckbox("Email")}
+                        checked={form.contactMethod.includes("Email")}
+                      />
+                      Email
+                    </label>
+                  </div>
+                </div>
               </div>
 
+              {/* RIGHT SIDE */}
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Type of Event</label>
-                <select
-                  value={form.eventType}
-                  onChange={(e) => setForm({ ...form, eventType: e.target.value })}
-                  className={inputClasses}
-                >
-                  <option value="">Select event type</option>
-                  <option value="corporate">Corporate Event</option>
-                  <option value="wedding">Wedding</option>
-                  <option value="concert">Concert</option>
-                  <option value="exhibition">Exhibition</option>
-                  <option value="conference">Conference</option>
-                  <option value="private">Private Party</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Message</label>
                 <textarea
-                  rows={5}
+                  placeholder="Your enquiry details"
+                  rows={12}
                   value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className={`${inputClasses} resize-y`}
+                  onChange={(e) =>
+                    setForm({ ...form, message: e.target.value })
+                  }
+                  className={`${inputClasses} h-full resize-none`}
                 />
               </div>
+            </div>
 
-              <motion.button
-                type="submit"
-                className="w-full py-4 rounded-lg font-bold text-sm tracking-wider text-primary-foreground transition-colors"
-                style={{
-                  background: "linear-gradient(135deg, hsl(222 62% 18%) 0%, hsl(222 80% 35%) 50%, hsl(222 80% 45%) 100%)",
-                }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Submit
-              </motion.button>
-            </motion.form>
-          </motion.div>
+            {/* SUBMIT BUTTON */}
+            <motion.button
+              type="submit"
+              className="w-full py-4 rounded-lg font-bold text-white"
+              style={{
+                background:
+                  "linear-gradient(135deg, hsl(222 62% 18%) 0%, hsl(222 80% 45%) 100%)",
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              SUBMIT
+            </motion.button>
+          </form>
         </div>
       </section>
 
