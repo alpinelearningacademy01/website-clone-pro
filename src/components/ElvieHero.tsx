@@ -118,7 +118,8 @@ const ElvieHero = () => {
         muted
         playsInline
         poster={heroBg}
-        className="absolute inset-0 w-full h-full object-cover"
+        // className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover object-top"
         initial={{ scale: 1.15 }}
         animate={{ scale: 1 }}
         transition={{ duration: 8, ease: "easeOut" }}

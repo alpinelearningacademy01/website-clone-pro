@@ -44,6 +44,20 @@ const ElvieFooter = () => {
       }
     );
   };
+
+  const companyLinks = [
+    { name: "About Us", path: "/aboutus" },
+    { name: "Events", path: "/corporate-gifts" },
+    { name: "Gallery", path: "/gallery" },
+    { name: "Contact", path: "/booking" },
+  ];
+
+  const supportLinks = [
+    { name: "FAQ", path: "/faq" },
+    { name: "Privacy Policy", path: "/privacy-policy" },
+    { name: "Terms & Conditions", path: "/terms-and-conditions" },
+  ];
+
   return (
     <footer className="relative text-white">
       {/* Background */}
@@ -60,7 +74,7 @@ const ElvieFooter = () => {
         {/* Top Section */}
         <div className="grid md:grid-cols-4 gap-10 mb-14">
 
-          {/* Company */}
+          {/* Logo & Info */}
           <div className="flex flex-col gap-4">
             <Link to="/" className="flex items-center">
               <img
@@ -80,7 +94,7 @@ const ElvieFooter = () => {
 
             <div className="mt-4 text-sm text-white/70">
               <p>Email: elvieevents@gmail.com</p>
-              <p>Contact: +971 5029137212</p>
+              <p>Contact: +971 52 132 7081</p>
             </div>
           </div>
 
@@ -88,10 +102,13 @@ const ElvieFooter = () => {
           <div>
             <h4 className="font-semibold mb-4 text-white">Company</h4>
             <ul className="space-y-2 text-sm text-white/70">
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Events</a></li>
-              <li><a href="#">Gallery</a></li>
-              <li><a href="#">Contact</a></li>
+              {companyLinks.map((link) => (
+                <li key={link.name}>
+                  <Link to={link.path} className="hover:text-white transition-colors">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -99,9 +116,13 @@ const ElvieFooter = () => {
           <div>
             <h4 className="font-semibold mb-4 text-white">Support</h4>
             <ul className="space-y-2 text-sm text-white/70">
-              <li><a href="#">FAQ</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Terms & Conditions</a></li>
+              {supportLinks.map((link) => (
+                <li key={link.name}>
+                  <Link to={link.path} className="hover:text-white transition-colors">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -144,7 +165,7 @@ const ElvieFooter = () => {
               </a>
 
               <a
-                href="https://wa.me/9715029137212"
+                href="https://wa.me/971521327081"
                 target="_blank"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20"
               >

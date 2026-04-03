@@ -318,7 +318,7 @@ const CorporateGifts = () => {
                 <Gift className="w-5 h-5" /> Get in Touch
               </motion.a>
               <motion.a
-                href="tel:+9715029137212"
+                href="tel:+971521327081"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-bold text-sm tracking-wider border-2 border-primary-foreground/50 text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
@@ -428,7 +428,7 @@ const CorporateGifts = () => {
 
                   <div>
                     <p className="text-xs text-muted-foreground">Call Us</p>
-                    <a href="tel:+9715029137212" className="font-semibold text-foreground hover:text-accent transition-colors">+971 502 913 7212</a>
+                    <a href="tel:+971521327081" className="font-semibold text-foreground hover:text-accent transition-colors">+971 52 132 7081</a>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 p-4 rounded-lg bg-card border border-border">
@@ -437,7 +437,7 @@ const CorporateGifts = () => {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Email Us</p>
-                    <a href="mailto: elvieevents@gmail.com" className="font-semibold text-foreground hover:text-accent transition-colors">navazsherasiya0@gmail.com</a>
+                    <a href="mailto: elvieevents@gmail.com" className="font-semibold text-foreground hover:text-accent transition-colors">elvieevents@gmail.com</a>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 p-4 rounded-lg bg-card border border-border">
@@ -446,7 +446,7 @@ const CorporateGifts = () => {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">WhatsApp</p>
-                    <a href="https://wa.me/+9715029137212" target="_blank" rel="noreferrer" className="font-semibold text-foreground hover:text-accent transition-colors">Chat with us</a>
+                    <a href="https://wa.me/+971521327081" target="_blank" rel="noreferrer" className="font-semibold text-foreground hover:text-accent transition-colors">Chat with us</a>
                   </div>
                 </div>
               </div>
@@ -763,7 +763,7 @@ const CorporateGifts = () => {
                 <Gift className="w-5 h-5" /> Get Custom Quote
               </motion.a>
               <motion.a
-                href="tel:+9715029137212"
+                href="tel:+971521327081"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-bold text-sm tracking-wider border-2 border-primary-foreground/50 text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
@@ -779,15 +779,15 @@ const CorporateGifts = () => {
       <section className="py-6 elvie-gradient-dark border-t border-primary-foreground/10">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-primary-foreground/70 text-sm">
-            <a href="tel:+9715029137212" className="flex items-center gap-2 hover:text-primary-foreground transition-colors">
-              <Phone className="w-4 h-4" /> +971 502 913 7212
+            <a href="tel:+971521327081" className="flex items-center gap-2 hover:text-primary-foreground transition-colors">
+              <Phone className="w-4 h-4" /> +971 52 132 7081
             </a>
             <span className="hidden md:block text-primary-foreground/30">|</span>
             <a href="mailto:navazsherasiya0@gmail.com" className="flex items-center gap-2 hover:text-primary-foreground transition-colors">
-              <Mail className="w-4 h-4" /> navazsherasiya0@gmail.com
+              <Mail className="w-4 h-4" /> elvieevents@gmail.com
             </a>
             <span className="hidden md:block text-primary-foreground/30">|</span>
-            <a href="https://wa.me/+9715029137212" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-primary-foreground transition-colors">
+            <a href="https://wa.me/+971521327081" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-primary-foreground transition-colors">
               <MessageSquare className="w-4 h-4" /> WhatsApp Us
             </a>
           </div>
