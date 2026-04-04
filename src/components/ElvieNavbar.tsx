@@ -1,21 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Phone, Menu, X } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Phone, Menu, X, ChevronDown } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoImg from "../assets/Logo.webp";
+
+const giftTypes = [
+  "Onboarding Gifts",
+  "Corporate Plants",
+  "Corporate Flowers",
+  "Cupcakes for Corporate Events",
+  "Corporate Cakes",
+  "Chocolates for Corporate Gifting",
+  "Corporate Gifts",
+  "Corporate Gift Combos",
+  "Corporate Gift Hampers",
+  "Corporate Technology Gifts",
+  "Corporate Bags & Travel Gifts",
+  "Outdoor & Safety Items",
+  "Office & Writing Gifts for Corporate",
+  "Drinkware for Corporate Gifting",
+  "Personal Accessories",
+  "Corporate Promotional Gifts",
+  "Apparel for Corporate Gifting",
+  "Laptop Bags for Corporate Gifting"
+];
 
 const navLinks = [
   { label: "HOME", href: "/" },
   { label: "ABOUT US", href: "/aboutus" },
   { label: "GALLERY", href: "/gallery" },
   { label: "BOOKING", href: "/booking" },
-  { label: "CORPORATE GIFTS", href: "/corporate-gifts" },
 ];
 
 const ElvieNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -26,6 +49,23 @@ const ElvieNavbar = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleCategoryClick = (type: string) => {
+    setDropdownOpen(false);
+    setMobileOpen(false);
+    navigate(`/corporate-gifts?type=${encodeURIComponent(type)}`);
+  };
 
   return (
     <motion.nav
@@ -46,7 +86,7 @@ const ElvieNavbar = () => {
         </Link>
 
         <div className="hidden md:flex items-center gap-1">
-          {navLinks.map((link, i) => (
+          {navLinks.map((link) => (
             <Link
               key={link.label}
               to={link.href}
@@ -60,11 +100,60 @@ const ElvieNavbar = () => {
                 className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-elvie-blue-light rounded-full transition-all duration-300 ${location.pathname === link.href ? "w-3/4" : "w-0 group-hover:w-3/4"
                   }`}
               />
-              {i < navLinks.length - 1 && (
-                <span className="ml-4 text-primary-foreground/30">|</span>
-              )}
+              <span className="ml-4 text-primary-foreground/30">|</span>
             </Link>
           ))}
+
+          {/* Corporate Gifts Split Link / Dropdown */}
+          <div className="relative group" ref={dropdownRef}>
+            <div className="flex items-center">
+              <Link
+                to="/corporate-gifts"
+                className={`pl-4 pr-1 py-2 text-sm font-medium tracking-wider relative group transition-colors ${location.pathname === "/corporate-gifts"
+                  ? "text-primary-foreground"
+                  : "text-primary-foreground/90 hover:text-primary-foreground"
+                  }`}
+              >
+                CORPORATE GIFTS BY TYPE
+                <span
+                  className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-elvie-blue-light rounded-full transition-all duration-300 ${location.pathname === "/corporate-gifts" ? "w-3/4" : "w-0 group-hover:w-3/4"
+                    }`}
+                />
+              </Link>
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="p-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                aria-label="Toggle Gifts Dropdown"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
+              </button>
+            </div>
+
+            <AnimatePresence>
+              {dropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-full left-0 mt-2 w-64 bg-card border border-border rounded-xl shadow-2xl overflow-hidden z-50 max-h-[70vh] overflow-y-auto custom-scrollbar"
+                >
+                  <div className="py-2">
+                    {giftTypes.map((type) => (
+                      <button
+                        key={type}
+                        onClick={() => handleCategoryClick(type)}
+                        className="w-full text-left px-5 py-2.5 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors border-b border-border/50 last:border-0"
+                      >
+                        {type}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           <motion.a
             href="tel:+971521327081"
             className="ml-4 flex items-center gap-2 border border-primary-foreground/50 rounded-lg px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
@@ -87,7 +176,7 @@ const ElvieNavbar = () => {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="md:hidden elvie-gradient-dark border-t border-primary-foreground/10 pb-4"
+            className="md:hidden elvie-gradient-dark border-t border-primary-foreground/10 pb-4 max-h-[85vh] overflow-y-auto"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -97,13 +186,47 @@ const ElvieNavbar = () => {
               <motion.div key={link.label} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
                 <Link
                   to={link.href}
-                  className="block px-6 py-3 text-sm font-medium tracking-wider text-primary-foreground/90 hover:text-primary-foreground"
+                  className="block px-6 py-3 text-sm font-medium tracking-wider text-primary-foreground/90 hover:text-primary-foreground whitespace-nowrap"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.label}
                 </Link>
               </motion.div>
             ))}
+
+            {/* Mobile Corporate Gifts with Dropdown */}
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: navLinks.length * 0.05 }}>
+              <div className="px-6 py-3">
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center justify-between w-full text-sm font-medium tracking-wider text-primary-foreground/90 hover:text-primary-foreground"
+                >
+                  CORPORATE GIFTS
+                  <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
+                </button>
+                <AnimatePresence>
+                  {dropdownOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden bg-primary-foreground/5 rounded-lg mt-2"
+                    >
+                      {giftTypes.map((type) => (
+                        <button
+                          key={type}
+                          onClick={() => handleCategoryClick(type)}
+                          className="w-full text-left px-4 py-2 text-[13px] text-primary-foreground/70 hover:text-primary-foreground border-b border-primary-foreground/5 last:border-0"
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+
             <a
               href="tel:+971521327081"
               className="mx-6 mt-2 flex items-center justify-center gap-2 border border-primary-foreground/50 rounded px-4 py-2 text-sm font-semibold text-primary-foreground"
@@ -119,3 +242,4 @@ const ElvieNavbar = () => {
 };
 
 export default ElvieNavbar;
+

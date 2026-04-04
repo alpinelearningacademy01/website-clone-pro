@@ -1,5 +1,5 @@
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 // ── Import all logos ──
 import logo17 from "../assets/FEATURE_CLIENTS/17-0117194.png";
@@ -53,43 +53,17 @@ const logos: string[] = [
   logo52, logo53, logo54, logo55, logo56, logo57,
 ];
 
-const LOGOS_PER_PAGE = 6;
-
-const pages: string[][] = [];
-for (let i = 0; i < logos.length; i += LOGOS_PER_PAGE) {
-  pages.push(logos.slice(i, i + LOGOS_PER_PAGE));
-}
-
-const TOTAL_PAGES = pages.length;
-
-const variants = {
-  enter: { x: "100%", opacity: 0 },
-  center: { x: 0, opacity: 1 },
-  exit: { x: "-100%", opacity: 0 },
-};
+// Double the logos for seamless marquee
+const doubleLogos = [...logos, ...logos];
 
 const ElvieClients = () => {
-
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const [page, setPage] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setPage((prev) => (prev + 1) % TOTAL_PAGES);
-    }, 3000);
-
-    return () => clearInterval(timer);
-  }, []);
-
   return (
-    <section className="py-16 bg-background" ref={ref}>
-
+    <section className="py-16 bg-background overflow-hidden" ref={ref}>
       {/* Heading */}
-
-      <div className="container mx-auto px-4 text-center mb-12">
-
+      <div className="container mx-auto px-4 text-center mb-16">
         <motion.h2
           className="text-2xl md:text-3xl font-bold tracking-wider uppercase"
           initial={{ opacity: 0, y: 20 }}
@@ -98,7 +72,6 @@ const ElvieClients = () => {
         >
           Featured Clients
         </motion.h2>
-
         <motion.p
           className="mt-3 text-muted-foreground"
           initial={{ opacity: 0 }}
@@ -107,74 +80,41 @@ const ElvieClients = () => {
         >
           Big names, bigger results. See who's onboard.
         </motion.p>
-
       </div>
 
-      {/* Slider */}
-
-      <div className="relative overflow-hidden w-full">
-
-        <AnimatePresence mode="wait">
-
-          <motion.div
-            key={page}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.55 }}
-            className="grid grid-cols-3 md:grid-cols-6 gap-12 px-10 items-center"
-          >
-
-            {pages[page].map((src, i) => (
-
-              <motion.div
-                key={i}
-                className="flex items-center justify-center"
-                whileHover={{ scale: 1.1 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-              >
-
-                <img
-                  src={src}
-                  alt="client logo"
-                  className="h-28 md:h-32 lg:h-36 w-auto object-contain"
-                  draggable={false}
-                />
-
-              </motion.div>
-
-            ))}
-
-          </motion.div>
-
-        </AnimatePresence>
-
+      {/* Marquee Row */}
+      <div className="flex relative">
+        <motion.div
+          className="flex flex-nowrap gap-12 items-center"
+          animate={{
+            x: [0, "-50%"],
+          }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 50,
+              ease: "linear",
+            },
+          }}
+          whileHover={{ transition: { duration: 100 } }} // Slows down on hover
+          style={{ width: "fit-content" }}
+        >
+          {doubleLogos.map((src, i) => (
+            <div
+              key={i}
+              className="flex-shrink-0 flex items-center justify-center px-4"
+            >
+              <img
+                src={src}
+                alt="client logo"
+                className="h-20 md:h-24 lg:h-28 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300 pointer-events-none"
+                draggable={false}
+              />
+            </div>
+          ))}
+        </motion.div>
       </div>
-
-      {/* Dots */}
-
-      <div className="flex justify-center gap-2 mt-10">
-
-        {pages.map((_, i) => (
-
-          <button
-            key={i}
-            onClick={() => setPage(i)}
-            className="rounded-full transition-all"
-            style={{
-              width: i === page ? "22px" : "8px",
-              height: "8px",
-              background: i === page ? "#1a3c6e" : "#d1d5db",
-            }}
-          />
-
-        ))}
-
-      </div>
-
     </section>
   );
 };

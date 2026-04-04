@@ -5,8 +5,9 @@ import {
   Star, Users, CheckCircle, ChevronDown, ChevronUp,
   GemIcon, Laptop, Coffee, Flower2, PenTool, Smartphone,
   TreePine, ShoppingBag, Crown, Heart, Sparkles, Send,
-  Phone, Mail, ChevronLeft, ChevronRight, Quote, MessageSquare,
+  Phone, Mail, ChevronLeft, ChevronRight, Quote, MessageSquare, X
 } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import ElvieNavbar from "@/components/ElvieNavbar";
 import ElvieFooter from "@/components/ElvieFooter";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -39,28 +40,42 @@ import trending6 from "@/assets/trending-6.png";
 
 /* ─── Gift Categories ─── */
 const giftCategories = [
-  { img: giftHamper, label: "Premium Hampers" },
-  { img: giftOnboarding, label: "Onboarding Gifts" },
-  { img: giftSustainable, label: "Sustainable Products" },
-  { img: giftDrinkware, label: "Drinkware" },
-  { img: giftWriting, label: "Office & Writing" },
-  { img: giftGadgets, label: "Gadgets & Tech" },
-  { img: giftEmployee, label: "Gifts for Employees" },
-  { img: giftLaptopBag, label: "Laptop Bags" },
-  { img: giftTech, label: "Technology Gifts" },
-  { img: giftVip, label: "VIP & Executive" },
-  { img: giftPlants, label: "Corporate Plants" },
-  { img: giftBags, label: "Corporate Bags" },
+  { img: giftHamper, label: "Corporate Gift Hampers", type: "Corporate Gift Hampers" },
+  { img: giftOnboarding, label: "Onboarding Gifts", type: "Onboarding Gifts" },
+  { img: giftSustainable, label: "Sustainable Products", type: "Sustainable Products" },
+  { img: giftDrinkware, label: "Drinkware for Corporate Gifting", type: "Drinkware for Corporate Gifting" },
+  { img: giftWriting, label: "Office & Writing Gifts for Corporate", type: "Office & Writing Gifts for Corporate" },
+  { img: giftGadgets, label: "Corporate Technology Gifts", type: "Corporate Technology Gifts" },
+  { img: giftEmployee, label: "Gifts for Employees", type: "Gifts for Employees" },
+  { img: giftLaptopBag, label: "Laptop Bags for Corporate Gifting", type: "Laptop Bags for Corporate Gifting" },
+  { img: giftVip, label: "VIP & Executive", type: "VIP & Executive" },
+  { img: giftPlants, label: "Corporate Plants", type: "Corporate Plants" },
+  { img: giftBags, label: "Corporate Bags & Travel Gifts", type: "Corporate Bags & Travel Gifts" },
+  { img: giftTech, label: "Corporate Technology Gifts", type: "Corporate Technology Gifts" },
 ];
 
 /* ─── Trending Products ─── */
 const trendingGifts = [
-  { img: trending1, title: "Executive Leather Set", price: "AED 350", tag: "Best Seller" },
-  { img: trending2, title: "Luxury Chocolate Box", price: "AED 180", tag: "Popular" },
-  { img: trending3, title: "Wellness Hamper", price: "AED 420", tag: "New" },
-  { img: trending4, title: "Branded Tech Kit", price: "AED 550", tag: "Premium" },
-  { img: trending5, title: "Gourmet Food Hamper", price: "AED 290", tag: "Trending" },
-  { img: trending6, title: "Desk Organizer Set", price: "AED 220", tag: "Popular" },
+  { img: trending1, title: "Executive Leather Set", price: "AED 350", tag: "Best Seller", category: "Office & Writing Gifts for Corporate" },
+  { img: trending2, title: "Luxury Chocolate Box", price: "AED 180", tag: "Popular", category: "Chocolates for Corporate Gifting" },
+  { img: trending3, title: "Wellness Hamper", price: "AED 420", tag: "New", category: "Corporate Gift Hampers" },
+  { img: trending4, title: "Branded Tech Kit", price: "AED 550", tag: "Premium", category: "Corporate Technology Gifts" },
+  { img: trending5, title: "Gourmet Food Hamper", price: "AED 290", tag: "Trending", category: "Corporate Gift Hampers" },
+  { img: trending6, title: "Desk Organizer Set", price: "AED 220", tag: "Popular", category: "Office & Writing Gifts for Corporate" },
+];
+
+/* ─── All Sample Gifting Items (for filter) ─── */
+const allGifts = [
+  ...trendingGifts,
+  { img: giftHamper, title: "Deluxe Celebration Hamper", price: "AED 450", tag: "Bestseller", category: "Corporate Gift Hampers" },
+  { img: giftOnboarding, title: "Welcome Kit - Series A", price: "AED 299", tag: "New", category: "Onboarding Gifts" },
+  { img: giftPlants, title: "Bonsai Zen Tree", price: "AED 120", tag: "Plants", category: "Corporate Plants" },
+  { img: giftDrinkware, title: "Thermal Hydration Bottle", price: "AED 85", tag: "Premium", category: "Drinkware for Corporate Gifting" },
+  { img: giftWriting, title: "Signature Fountain Pen", price: "AED 210", tag: "Executive", category: "Office & Writing Gifts for Corporate" },
+  { img: giftLaptopBag, title: "Anti-Theft Commuter Bag", price: "AED 320", tag: "Popular", category: "Laptop Bags for Corporate Gifting" },
+  { img: trending2, title: "Belgian Truffles Box", price: "AED 145", tag: "Gift", category: "Chocolates for Corporate Gifting" },
+  { img: trending4, title: "Wireless Charging Pad", price: "AED 175", tag: "Tech", category: "Corporate Technology Gifts" },
+  { img: giftVip, title: "Crystal Award Plaque", price: "AED 850", tag: "VIP", category: "VIP & Executive" },
 ];
 
 /* ─── Why Choose Us ─── */
@@ -193,6 +208,9 @@ const TestimonialCarousel = () => {
 
 /* ─── Main Page ─── */
 const CorporateGifts = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeType = searchParams.get("type");
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -331,40 +349,116 @@ const CorporateGifts = () => {
       </section>
 
       {/* ═══════════ EXCLUSIVE GIFT CATEGORIES ═══════════ */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background scroll-mt-20" id="gifts-section">
         <div className="container mx-auto px-4">
           <AnimatedSection>
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Exclusive Corporate Gifts</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                Elvie Events offers a seamless solution for sending heartfelt and memorable gifts to your customers, partners, and team members. Explore our diverse range of premium gifts and make every gesture count.
-              </p>
+            <div className={`flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6 ${!activeType && 'text-center'}`}>
+              <div className={activeType ? "max-w-3xl" : "mx-auto max-w-3xl"}>
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                  {activeType ? activeType : "Exclusive Corporate Gifts"}
+                </h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  {activeType
+                    ? `Explore our curated selection of high-quality ${activeType} specially chosen for corporate gifting excellence.`
+                    : "Elvie Events offers a seamless solution for sending heartfelt and memorable gifts to your customers, partners, and team members. Explore our diverse range of premium gifts and make every gesture count."
+                  }
+                </p>
+              </div>
+              {activeType && (
+                <button
+                  onClick={() => setSearchParams({})}
+                  className="flex items-center gap-2 text-accent font-bold hover:underline transition-all whitespace-nowrap"
+                >
+                  <X className="w-4 h-4" /> View All Gifts
+                </button>
+              )}
             </div>
           </AnimatedSection>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
-            {giftCategories.map((cat, i) => (
-              <AnimatedSection key={cat.label} delay={i * 0.04}>
+
+          {activeType ? (
+            /* ─── Filtered Collection View ─── */
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {allGifts.filter(g => g.category.includes(activeType) || activeType.includes(g.category) || (g as any).type === activeType).length > 0 ? (
+                allGifts.filter(g => g.category.includes(activeType) || activeType.includes(g.category) || (g as any).type === activeType).map((gift, i) => (
+                  <motion.div
+                    key={`${gift.title}-${i}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="rounded-2xl border border-border bg-card overflow-hidden group hover:shadow-2xl transition-all duration-500"
+                  >
+                    <div className="relative aspect-[4/5] overflow-hidden">
+                      <img src={gift.img} alt={gift.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest text-primary-foreground elvie-gradient shadow-lg">
+                        {gift.tag}
+                      </span>
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-sm font-bold text-foreground mb-2 group-hover:text-accent transition-colors">{gift.title}</h3>
+                      <p className="text-accent font-black text-xl">{gift.price}</p>
+                      <button className="mt-4 w-full py-2.5 rounded-lg text-xs font-bold border border-border bg-secondary/50 hover:bg-accent hover:text-accent-foreground transition-all">ENQUIRE NOW</button>
+                    </div>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="col-span-full py-24 text-center border-2 border-dashed border-border rounded-3xl">
+                  <Package className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
+                  <p className="text-xl font-bold text-muted-foreground mb-4">More collections for {activeType} are coming soon!</p>
+                  <button onClick={() => setSearchParams({})} className="text-accent font-bold hover:underline">Browse current collection</button>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* ─── Default Home Overview ─── */
+            <>
+              <div className="relative overflow-hidden mb-12 select-none">
                 <motion.div
-                  className="flex flex-col items-center rounded-xl border border-border bg-card hover:shadow-xl transition-all duration-300 cursor-pointer group overflow-hidden"
-                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="flex flex-nowrap gap-5 items-center"
+                  animate={{ x: [0, "-50%"] }}
+                  transition={{ x: { repeat: Infinity, duration: 40, ease: "linear" } }}
+                  whileHover={{ transition: { duration: 80 } }}
+                  style={{ width: "fit-content" }}
                 >
-                  <div className="w-full aspect-square overflow-hidden bg-secondary/30">
-                    <img
-                      src={cat.img}
-                      alt={cat.label}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      loading="lazy"
-                      width={512}
-                      height={512}
-                    />
-                  </div>
-                  <div className="p-3 text-center">
-                    <span className="text-xs font-bold text-foreground tracking-wide uppercase leading-tight">{cat.label}</span>
-                  </div>
+                  {[...trendingGifts, ...trendingGifts].map((gift, i) => (
+                    <div key={`${gift.title}-${i}`} className="flex-shrink-0 w-48 md:w-56 lg:w-64">
+                      <motion.div className="rounded-xl border border-border bg-card overflow-hidden group cursor-pointer hover:shadow-xl transition-all" whileHover={{ y: -6 }}>
+                        <div className="relative aspect-square overflow-hidden">
+                          <img src={gift.img} alt={gift.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" width={512} height={512} />
+                          <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide text-primary-foreground elvie-gradient">{gift.tag}</span>
+                        </div>
+                        <div className="p-3">
+                          <h3 className="text-xs font-bold text-foreground leading-tight mb-1">{gift.title}</h3>
+                          <p className="text-accent font-bold text-sm">{gift.price}</p>
+                        </div>
+                      </motion.div>
+                    </div>
+                  ))}
                 </motion.div>
-              </AnimatedSection>
-            ))}
-          </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
+                {giftCategories.map((cat, i) => (
+                  <AnimatedSection key={cat.label} delay={i * 0.04}>
+                    <motion.div
+                      onClick={() => {
+                        setSearchParams({ type: cat.type });
+                        document.getElementById('gifts-section')?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="flex flex-col items-center rounded-xl border border-border bg-card hover:shadow-xl transition-all duration-300 cursor-pointer group overflow-hidden"
+                      whileHover={{ y: -8, scale: 1.02 }}
+                    >
+                      <div className="w-full aspect-square overflow-hidden bg-secondary/30">
+                        <img src={cat.img} alt={cat.label} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" width={512} height={512} />
+                      </div>
+                      <div className="p-3 text-center">
+                        <span className="text-xs font-bold text-foreground tracking-wide uppercase leading-tight group-hover:text-accent transition-colors">{cat.label}</span>
+                      </div>
+                    </motion.div>
+                  </AnimatedSection>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
 
@@ -558,7 +652,7 @@ const CorporateGifts = () => {
               <a href="#inquiry" className="text-accent hover:underline font-semibold text-sm hidden sm:block">View All →</a>
             </div>
           </AnimatedSection> */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+          {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
             {trendingGifts.map((gift, i) => (
               <AnimatedSection key={gift.title} delay={i * 0.06}>
                 <motion.div
@@ -585,7 +679,7 @@ const CorporateGifts = () => {
                 </motion.div>
               </AnimatedSection>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
 
